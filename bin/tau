@@ -1,0 +1,139 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var fs = require('fs');
+var cli = require('clap');
+var chalk = require('chalk');
+var ConfigStore = require('../lib/config-store');
+
+var packageInfo = require('../package.json');
+var globalConfig = new ConfigStore(packageInfo.name);
+var silent = false;
+
+
+
+// ==============================
+// Check for newer version of tau-tools
+require('update-notifier')({
+  packageName: packageInfo.name,
+  packageVersion: packageInfo.version
+}).notify({ defer: false });
+// ==============================
+
+
+//
+// helpers
+//
+
+function fetchConfig(filename){
+  var fileContent;
+  var data;
+
+  filename = path.resolve(filename);
+
+  try {
+    fileContent = fs.readFileSync(filename, 'utf-8');
+  } catch(e) {
+    if (!silent)
+      console.error('Config read error: ' + e);
+    process.exit(1);
+  }
+
+  try {
+    data = JSON.parse(fileContent);
+  } catch(e) {
+    if (!silent)
+      console.error('Config parse error: ' + e);
+    process.exit(1);
+  }
+
+  return {
+    filename: filename,
+    path: path.dirname(filename),
+    data: data
+  };
+}
+
+function searchConfig(optional){
+  var curpath = process.cwd().split(path.sep);
+
+  while (curpath.length)
+  {
+    var cfgFile = curpath.join(path.sep) + path.sep + 'tau.config';
+
+    if (fs.existsSync(cfgFile))
+      return fetchConfig(cfgFile);
+
+    curpath.pop();
+  }
+}
+
+
+//
+// main part
+//
+
+var program = cli.create('tau')
+  .version(require('../package.json').version)
+  .option('-n, --no-config', 'Don\'t use tau.config')
+  .option('-c, --config-file <filename>', 'Specify path to config filename')
+  .delegate(function(nextCommand){
+    var options = this.values;
+    if (options.config)
+    {
+      var config = options.configFile
+        ? fetchConfig(options.configFile)
+        : searchConfig();
+
+      if (config)
+      {
+        nextCommand.config = config.data;
+        nextCommand.configFile = config.filename;
+        nextCommand.configPath = config.path;
+      }
+
+      nextCommand.globalConfig = globalConfig;
+    }
+  })
+  .action(function(){
+    this.showHelp();
+  });
+
+program.command(require('../lib/create/command.js'));
+
+program.command('config', '<name> [value]')
+  .description('Global configuration')
+  .action(function(args){
+    if (args.length == 0)
+    {
+      console.log(JSON.stringify(globalConfig.values, null, 2));
+      return;
+    }
+
+    var name = args[0];
+    if (args.length == 1)
+    {
+      // read
+      console.log('Config value for ' + name + ' is ' + JSON.stringify(globalConfig.get(name)));
+    }
+    else
+    {
+      // write
+      console.log('Set value ' + chalk.green(JSON.stringify(args[1])) + ' for ' + chalk.green(name));
+      globalConfig.set(name, args[1]);
+    }
+  });
+
+// parse arguments
+try {
+  program.run();
+} catch(e) {
+  if (!silent)
+  {
+    if (e instanceof cli.Error)
+      console.error(e.message || e);
+    else
+      throw e;
+  }
+  process.exit(1);
+}
