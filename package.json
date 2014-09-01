@@ -1,7 +1,7 @@
 {
   "name": "tau-tools",
   "title": "Tau developer tools",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "http://www.targetprocess.com/",
   "description": "Developer tools for tau framework",
   "author": "Krivlenia Konstantin <krivlenia@gmail.com>",
