@@ -1,7 +1,7 @@
 {
   "name": "tau-tools",
   "title": "Tau developer tools",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "http://www.targetprocess.com/",
   "description": "Developer tools for tau framework",
   "author": "Krivlenia Konstantin <krivlenia@gmail.com>",
@@ -30,7 +30,8 @@
     "update-notifier": "0.2.0",
     "chalk": "0.5.1",
     "osenv": "0.1.0",
-    "mkdirp": "0.5.0"
+    "mkdirp": "0.5.0",
+    "uglify-js": "2.4.15"
   },
   "devDependencies": {
   },
