@@ -1,7 +1,7 @@
 {
   "name": "tau-tools",
   "title": "Tau developer tools",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "http://www.targetprocess.com/",
   "description": "Developer tools for tau framework",
   "author": "Krivlenia Konstantin <krivlenia@gmail.com>",
@@ -26,15 +26,15 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "chalk": "0.5.1",
-    "clap": "~1.0.0",
-    "esformatter": "^0.4.3",
+    "chalk": "1.1.3",
+    "clap": "~1.1.1",
+    "esformatter": "^0.9.3",
     "esformatter-quotes": "^1.0.0",
-    "mkdirp": "0.5.0",
-    "osenv": "0.1.0",
+    "mkdirp": "0.5.1",
+    "osenv": "0.1.3",
     "rocambole-commafirst": "^0.1.2",
-    "uglify-js": "2.4.15",
-    "update-notifier": "0.2.0"
+    "uglify-js": "2.6.2",
+    "update-notifier": "0.7.0"
   },
   "devDependencies": {},
   "scripts": {}

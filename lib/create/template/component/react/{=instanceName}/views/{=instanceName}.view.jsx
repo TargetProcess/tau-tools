@@ -1,13 +1,12 @@
-define(function (require) {
-    var React = require('libs/react/react-ex');
-    return React.createClass({
-        displayName: '{=name}',
-        render() {
-            return (
-                <div></div>
-            )
-        }
-    });
+var React = require('libs/react/react-ex');
+module.exports = React.createClass({
+    displayName: '{=name}',
+    render() {
+        return (
+            <div></div>
+        )
+    }
 });
+
 
 
